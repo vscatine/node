@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "moduleResolution": "Node",
+        "baseUrl": "./",
+        "paths": {
+            "*": ["./*"]
+        }
+    },
+    "include": ["**/*.js"]  // Agora todas as pastas e arquivos .js são incluídos automaticamente
+}
