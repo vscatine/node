@@ -1,0 +1,21 @@
+{
+  "name": "project-account",
+  "version": "1.0.0",
+  "description": "Simulating a bank account, where you can deposity and withdraw money, or get a bank statement.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "account",
+    "bank"
+  ],
+  "author": "Vitor Scatine",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "inquirer": "^12.5.0"
+  }
+}
