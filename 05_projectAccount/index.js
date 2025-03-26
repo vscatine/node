@@ -1,8 +1,8 @@
 //modules
-import chalk from "chalk";
-import inquirer from "inquirer";
-import fs from "fs";
-import { exit } from "process";
+import chalk from "chalk"
+import inquirer from "inquirer"
+import fs from "fs"
+import { exit } from "process"
 
 //global
 const bankName = 'Goliath National Bank'
@@ -48,8 +48,7 @@ function operation() {
                     accountCreate()
                     break
                 case 'Extrato':
-                    console.log('Em desenvolvimento...')
-                    bankClose()
+                    accountBalance()
                     break
                 case 'Sacar':
                     accountWithdraw()
@@ -62,17 +61,17 @@ function operation() {
             }
         })
         .catch((err) => {
-            if (err) console.log(clr.bgRed(err))
+            if (err) console.log(err)
         })
 }
 
 function accountCreate() {
-    console.log(clr.green(`Parabéns por escolher o ${bankName}!`))
+    console.log(clr.bgGreen(`Parabéns por escolher o ${bankName}!`))
     setTimeout(() => {
         console.log(clr.white('Insira os dados para criação da conta...'))
         accountBuild()
-    }, 1000);
-
+    }, 1000)
+    return
 }
 
 function accountBuild() {
@@ -81,6 +80,7 @@ function accountBuild() {
             if (err) console.log(err)
         })
     }
+
     inquirer.prompt([
         {
             type: 'input',
@@ -90,13 +90,12 @@ function accountBuild() {
     ])
         .then((answer) => {
             const accountName = answer['accountName']
+            const parsed = accountName.toLowerCase().replace(/\s+/g, '')
 
-            if (!accountName) {
+            if (!parsed) {
                 console.log(clr.bgRed(`Valor inválido!`))
                 return accountBuild()
             }
-
-            const parsed = accountName.toLowerCase().replace(/\s+/g, '')
 
             if (fs.existsSync(`accounts/${parsed}.json`)) {
                 console.log(clr.bgRed('Conta já existe!'))
@@ -104,11 +103,12 @@ function accountBuild() {
             }
 
             if (parsed === 'cancelar') {
+                console.log(clr.bgRed(`Criação de conta cancelada.`))
                 console.log(clr.yell(`\nRetornando para as opções...\n`))
                 setTimeout(() => {
                     console.clear()
-                    return operation()
-                }, 2000);
+                    operation()
+                }, 2000)
                 return
             }
 
@@ -117,8 +117,77 @@ function accountBuild() {
             console.log(clr.yell('\nRetornando para as opções...\n'))
             setTimeout(() => {
                 console.clear()
-                return operation()
+                operation()
             }, 4000)
+            return
+        })
+        .catch((err) => {
+            if (err) console.log(err)
+        })
+}
+
+function accountBalance() {
+    inquirer.prompt([
+        {
+            name:       'accountName',
+            message:    'Qual o nome da conta para extrato? ' + clr.red(`[Digite cancelar para encerrar]`)
+        }
+    ])
+        .then((answer) => {
+            const accountName = answer['accountName']
+            const parsed = accountName.toLowerCase().replace(/\s+/g, '')
+
+            if (!parsed) {
+                console.log(clr.bgRed(`É necessário passar o nome da conta para extrato.`))
+                return accountBalance()
+            }
+
+            if (parsed === 'cancelar') {
+                console.log(clr.yell(`\nRetornando para as opções...\n`))
+                setTimeout(() => {
+                    console.clear()
+                    operation()
+                }, 3000)
+                return
+            }
+
+            if (!accountExist(parsed)) {
+                console.log(clr.bgRed(`Conta não encontrada.`))
+                return accountCreateConfirm()
+            }
+
+            const data = fs.readFileSync(`accounts/${parsed}.json`, 'utf-8')
+            const account = JSON.parse(data)
+            console.log(clr.bgWhite.bold(`\nConta ${parsed}`))
+            console.log(clr.bgWhite.bold('Saldo: ' + clr.green(`R$ ${account.balance},00\n`)))
+
+            inquirer.prompt([
+                {   
+                    type:       'list',
+                    name:       'returnOperation',
+                    message:    'Retornar para o menu principal?',
+                    choices:    [
+                        'Sim',
+                        'Não (sair)'
+                    ]
+                }
+            ])
+                .then((answer) => {
+                    const option = answer['returnOperation']
+                    if (option === 'Sim') {
+                        console.log(clr.yell('\nRetornando para opções...\n'))
+                        setTimeout(() => {
+                            console.clear()
+                            operation()
+                        }, 2000)
+                        return
+                    }
+                    
+                    return bankClose()
+                })
+                .catch((err) => {
+                    if (err) console.log(err)
+                })
         })
         .catch((err) => {
             if (err) console.log(err)
@@ -139,17 +208,22 @@ function accountDeposit() {
     ])
         .then((answer) => {
             const accountName = answer['accountName']
+            const parsed = accountName.toLowerCase().replace(/\s+/g, '')
             const value = answer['value']
-            if (!accountName || !value) {
-                console.log(clr.bgRed(`Obrigatório passar nome da conta e valor de depósito.`))
+
+            if (!parsed || !value) {
+                console.log(clr.bgRed(`Obrigatório passar nome da conta e valor de depósito maior do que R$0,00.`))
                 return accountDeposit()
             }
-            
-            const parsed = accountName.toLowerCase().replace(/\s+/g, '')
             
             if (!accountExist(parsed)) {
                 console.log(clr.bgRed('Conta não encontrada.'))
                 return accountCreateConfirm()
+            }
+
+            if (value <= 0) {
+                console.log(clr.bgRed(`Valor do depósito deve ser maior do que R$0,00`))
+                return accountDeposit()
             }
 
             const data      = fs.readFileSync(`accounts/${parsed}.json`, 'utf-8')
@@ -159,15 +233,15 @@ function accountDeposit() {
 
             fs.writeFileSync(`accounts/${parsed}.json`, JSON.stringify(account))
             
-            console.log(`Depósito de R$${value},00 realizado com sucesso!`)
-            console.log(`Saldo autal: R${account.balance},00`)
+            console.log(clr.yell(`Depósito de R$${value},00 realizado com sucesso!`))
+            console.log(clr.green(`Saldo atual: R${account.balance},00`))
 
             console.log(clr.yell('\nRetornando para as opções...\n'))
             setTimeout(() => {
                 console.clear()
                 operation()
-            }, 5000);
-            
+            }, 5000)
+            return
         })
         .catch((err) => {
             if (err) console.log(err)
@@ -189,16 +263,21 @@ function accountWithdraw() {
         .then((answer) => {
             const accountName = answer['accountName']
             const value = answer['value']
-            if (!accountName || !value) {
-                console.log(clr.bgRed(`Obrigatório passar nome da conta e valor do saque.`))
+            const parsed = accountName.toLowerCase().replace(/\s+/g, '')
+
+            if (!parsed || !value) {
+                console.log(clr.bgRed(`Obrigatório passar nome da conta e valor do saque maior do que R$0,00.`))
                 return accountWithdraw()
             }
-            
-            const parsed = accountName.toLowerCase().replace(/\s+/g, '')
 
             if (!accountExist(parsed)) {
                 console.log(clr.bgRed(`Conta não encontrada.`))
                 return accountCreateConfirm()
+            }
+
+            if (value <= 0) {
+                console.log(clr.bgRed(`Valor do saque deve ser maior que R$0,00`))
+                return accountWithdraw()
             }
 
             const data = fs.readFileSync(`accounts/${parsed}.json`, 'utf-8')
@@ -212,25 +291,26 @@ function accountWithdraw() {
                 console.log(clr.red(`Valor do saque: R$${value}`))
                 setTimeout(() => {
                     console.log(clr.yell(`\nRetornando para as opções...\n`))    
-                }, 1000);
+                }, 1000)
                 setTimeout(() => {
                     console.clear()
-                    return operation()    
-                }, 5000);
+                    operation()    
+                }, 5000)
                 return
             }
             
             account.balance = remainBalance
             fs.writeFileSync(`accounts/${parsed}.json`, JSON.stringify(account))
             console.log(clr.green(`Saque de R$${value},00 realizado com sucesso!`))
-            console.log(clr.bgWhite(`Saldo remanescente R$${remainBalance},00`))
+            console.log(clr.bgWhite.black(`Saldo remanescente R$${remainBalance},00`))
             setTimeout(() => {
                 console.log(clr.yell(`\nRetornando para as opções...\n`))    
-            }, 1000);
+            }, 1000)
             setTimeout(() => {
                 console.clear()
-                return operation()    
-            }, 5000);
+                operation()    
+            }, 5000)
+            return
         })
         .catch((err) => {
             if (err) console.log(err)
@@ -264,7 +344,8 @@ function accountCreateConfirm() {
             setTimeout(() => {
                 console.clear()
                 operation()
-            }, 1000);
+            }, 1000)
+            return
         })
 
         .catch((err) => {
@@ -273,9 +354,10 @@ function accountCreateConfirm() {
 }
 
 function bankClose() {
-    console.log(clr.bgYell.bold(`\n${bankName} agradece sua visita. Até logo!`))
+    console.log(clr.bgYell(`\n${bankName} agradece sua visita. Até logo!`))
     setTimeout(() => {
         console.clear()
         exit
-    }, 1500);
+    }, 1500)
+    return
 }
