@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./serve.js localhost 3000"
+    "serve": "nodemon ./index.js localhost 5000"
   },
   "author": "Vitor Scatine",
   "license": "ISC",
