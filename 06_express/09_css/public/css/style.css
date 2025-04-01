@@ -1,0 +1,14 @@
+body {
+    background-color: #dfdfdf;
+    text-align: center;
+    padding: 2em;
+}
+
+button {
+    background-color: red;
+}
+
+button a {
+    color: #fff;
+    text-decoration: none;
+}

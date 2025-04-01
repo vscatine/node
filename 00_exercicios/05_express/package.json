@@ -1,0 +1,16 @@
+{
+  "name": "05_express",
+  "version": "1.0.0",
+  "description": "Exercício com express",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./serve.js localhost 3000"
+  },
+  "author": "Vitor Scatine",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "nodemon": "^3.1.9"
+  }
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de usuário</title>
+</head>
+<body>
+    <h1>Cadastrando novo usuário</h1>
+    <form action="/users/save" method="post">
+        <div>
+            <label for="name">Nome</label>
+            <input type="text" name="name">
+        </div>
+        <div>
+            <label for="age">Idade</label>
+            <input type="number" name="age">
+        </div>
+        <div>
+            <input type="submit" value="Cadastrar">
+        </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,17 @@
+
+body {
+    background-color: #dfdfdf;
+    color: #343231;
+    text-align: center;
+}
+
+button {
+    background-color: #8426b7;
+    border-radius: 10%;
+}
+
+button a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
