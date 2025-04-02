@@ -1,0 +1,34 @@
+body {
+    background-color: #6700c7;
+    text-align: center;
+    color: #fff;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-prod {
+    width: 50%;
+    height: 100%;
+    background-color: #b3b3b3;
+    margin: 10px 0;
+}
+
+.home-prod a {
+    text-decoration: none;
+    color: red;
+}
+
+footer {
+    background-color: black;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+}
+
