@@ -1,0 +1,13 @@
+<h2>Livros</h2>
+<div>
+    <button><a href="/bookcad">Cadastrar livro</a></button>
+</div>
+
+<div><h3>Lista de livros</h3></div>
+{{#each books}}
+    <div>
+        <a href="/books/{{id}}">
+            #{{this.id}} - <span> {{this.title}}
+        </a> </span> - {{this.page_qt}} páginas
+    </div>
+{{/each}}

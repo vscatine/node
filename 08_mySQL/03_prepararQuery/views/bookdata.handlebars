@@ -1,0 +1,22 @@
+<h2> {{book.title}} </h2>
+<div>
+    <span>ID</span> - {{book.id}}
+</div>
+<div>
+    <span>Título</span> - {{book.title}}
+</div>
+<div>
+    <span>Quantidade de páginas</span> - {{book.page_qt}}
+</div>
+<div>
+    <button>
+        <a href="/books/edit/{{book.id}}">Editar</a>
+    </button>
+    <form action="/books/delete/{{book.id}}" method="post">
+        <input type="hidden" name="id" value="{{book.id}}">
+        <input type="submit" value="Excluir POST">
+    </form>
+    <button>
+        <a href="/books/delete/{{book.id}}">Excluir GET</a>
+    </button>
+</div>
