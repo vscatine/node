@@ -1,4 +1,3 @@
-const e = require('express')
 const express = require('express')
 const exphbs = require('express-handlebars')
 const conn = require('./db/conn')
@@ -23,10 +22,13 @@ app.get('/users/create', (req, res) => {
     res.render('usercreate')
 })
 
-app.get('/', (req, res) => {
-    res.render('home')
+/* Select ALL */
+app.get('/', async (req, res) => {
+    const users = await User.findAll({raw:true})
+    res.render('home', {users : users})
 })
 
+/* Insert*/
 app.post('/user/create', async (req, res) => {
     const name = req.body.name
     const occupation = req.body.occupation
@@ -36,6 +38,25 @@ app.post('/user/create', async (req, res) => {
 
     await User.create({name, occupation, newsletter})
    
+    res.redirect('/')
+})
+
+/* SELECT WHERE */ 
+app.get('/users/:id', async (req, res) => {
+    const idReq = req.params.id
+    const user = await User.findOne({ raw : true, where: {id : idReq} })
+    console.log(user)
+    res.render('userview', {user})
+})
+
+/* DELETE */
+app.post('/users/delete/:id', async (req, res) => {
+    reqId = req.params.id
+    await User.destroy({
+        where: {
+            id: reqId
+        }
+    })
     res.redirect('/')
 })
 
