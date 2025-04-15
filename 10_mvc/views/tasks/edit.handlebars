@@ -1,0 +1,21 @@
+<h1>Editar tarefa</h1>
+<form action="/tasks/edit" method="post">
+    <input type="hidden" name="id" value="{{task.id}}">
+    <div class="form-control">
+        <label for="title">Título</label>
+        <input type="text" name="title" id="title" placeholder="Insira o título da tarefa" value="{{task.title}}">
+    </div>
+    <div class="form-control">
+        <label for="description">Descrição</label>
+        <textarea name="description" id="description" placeholder="Descrição da tarefa">{{task.description}}</textarea>
+    </div>
+    <div class="form-control form-checkbox">
+        {{#if task.done}}
+            <input type="checkbox" name="done" id="done" checked>
+        {{else}}
+            <input type="checkbox" name="done" id="done">
+        {{/if}}
+        <label for="done">Tarefa concluída?</label>
+    </div>
+    <input type="submit" value="Editar Tarefa">
+</form>

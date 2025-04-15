@@ -6,13 +6,22 @@
 
 h1 {
     text-align: center;
-    margin: 0 10px 20px 10px;
+    margin: 0 10px 1.5em 10px;
 }
 
 a, a:visited {
     text-decoration: none;
     color: inherit;
 }
+
+.container {
+    max-width: 450px;
+    margin: 2em auto;
+ }
+
+ .container form {
+    margin-top: 1.5em;
+ }
 
 #navbar {
     border-bottom: 1px solid #ccc;
@@ -65,8 +74,11 @@ a, a:visited {
     margin-bottom: 0.3em;
 }
 
-.form-control input {
-    padding: 5px;
+.form-control input,
+ .form-control textarea {
+    padding: 7px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 .form-checkbox {
@@ -74,11 +86,70 @@ a, a:visited {
 }
 
 .form-checkbox input {
-    margin-right: 5px;
+    margin-right: 1em;
 }
 
-.container {
-   max-width: 450px;
-   margin: 2em auto;
+form input[type="submit"] {
+    background-color: #db4c3f;
+    color: #fff;
+    padding: .7em 1.5em;
+    margin-top: .5em;
+    font-weight: bold;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
 }
 
+.task-list {
+    list-style: none;
+}
+
+.task-list li {
+    padding: .5em;
+    margin-bottom: 1em;
+    border-bottom: 1px solid #efefef;
+    display: flex;
+    justify-content: space-between;
+}
+
+.task-list .title {
+    font-weight: bold;
+    color: #db4c3f;
+    transition: .5s;
+    font-size: 1.2em;
+}
+
+.task-list .title:hover {
+    color: #333;
+}
+
+.task-list .done {
+    text-decoration: line-through;
+    color: #ccc;
+}
+
+.actions {
+    display: flex;
+    flex-direction: row;
+}
+
+.actions i {
+    font-size: 1.2em;
+    margin-right: .6em;
+    color: #333;
+    transition: .5s;
+}
+
+.actions i:hover {
+    color: #db4c3f;
+}
+
+.actions form {
+    margin: 0;
+}
+
+.actions button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
